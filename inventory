@@ -1,0 +1,2 @@
+[webservers]
+192.168.11.41 ansible_ssh_user=joe 

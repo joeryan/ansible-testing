@@ -1,0 +1,48 @@
+---
+- hosts: webservers
+
+  tasks:
+  - name: install linux extras for kernel version
+    apt: name=linux-image-extra-{{ ansible_kernel }} state=present
+    become: true 
+
+  - name: install linux image virtual packages
+    apt: name=linux-image-extra-virtual state=present
+    become: true
+
+  - name: install apt-transport package
+    apt: name=apt-transport-https state=present
+    become: true 
+
+  - name: install ca-certificates package
+    apt: name=ca-certificates state=present
+    become: true
+ 
+  - name: install curl package
+    apt: name=curl state=present
+    become: true 
+
+  - name: install software-properties-common package
+    apt: name=software-properties-common state=present
+    become: true 
+
+  - name: install docker gpg key
+    apt_key:
+      id: 0EBFCD88
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present 
+    become: true
+
+  - name: add docker apt-repository
+    apt_repository: 
+      repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+      state: present
+    become: true
+
+  - name: install docker stable CE version
+    apt: 
+      name: docker-ce
+      state: present
+      update_cache: yes
+      install_recommends: yes    
+    become: true
